@@ -1,3 +1,9 @@
+<?php
+include 'admin/koneksi.php';
+
+$querySetting = mysqli_query($koneksi, "SELECT * FROM general_setting ORDER BY id DESC");
+$rowSetting = mysqli_fetch_assoc($querySetting);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
