@@ -5,6 +5,7 @@ include 'koneksi.php';
 //jika button simpan  di tekan
 
 $queryPengaturan =  mysqli_query($koneksi, "SELECT * FROM general_setting ORDER BY id DESC");
+$rowPengaturan = mysqli_fetch_assoc($queryPengaturan);
 
 
 if (isset($_POST['simpan'])) {
@@ -32,6 +33,9 @@ if (isset($_POST['simpan'])) {
                 die;
             } else {
                 //proses pemindahan gambar yang telah disimpan ke folder upload
+                //unlink() : mendelete file
+
+                unlink('upload/' . $rowPengaturan['logo']);
                 move_uploaded_file($_FILES['foto']['tmp_name'], 'upload/' . $nama_foto);
 
                 //memindahkan foto ke folder upload
@@ -71,7 +75,7 @@ if (isset($_POST['simpan'])) {
 }
 
 
-$rowPengaturan = mysqli_fetch_assoc($queryPengaturan);
+
 
 $id = isset($_GET['edit']) ? $_GET['edit'] : '';
 $queryEdit = mysqli_query($koneksi, "SELECT * FROM user WHERE id ='$id'");
@@ -210,6 +214,8 @@ if (isset($_POST['edit'])) {
                                                 <div class="col-sm-12">
                                                     <label for="" class="form-label">Foto</label>
                                                     <input type="file" name="foto">
+                                                    <img width="200" src="upload/<?php echo isset($rowPengaturan['logo']) ? $rowPengaturan['logo'] : '' ?>" alt="">
+
                                                 </div>
                                             </div>
                                             <div class="mb-3">
