@@ -2,7 +2,7 @@
 session_start();
 include 'koneksi.php';
 //munculkan / pilih sebuah atau semua kolom dari table user
-$queryUser = mysqli_query($koneksi, "SELECT  * FROM user");
+$queryContacts = mysqli_query($koneksi, "SELECT  * FROM contact WHERE deleted_at IS NULL");
 //mysqli_fetch_assoc($query) = untuk menjadikan hasil  query menjadi sebuah data (object, array)
 
 // jika parameternya ada ?delete=nilai param
@@ -78,7 +78,7 @@ if (isset($_GET['delete'])) {
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
-                                    <div class="card-header">Data user</div>
+                                    <div class="card-header">Manage Contact</div>
                                     <div class="card-body">
                                         <?php if (isset($_GET['hapus'])): ?>
                                             <div class="alert alert-success" role="alert">
@@ -93,12 +93,15 @@ if (isset($_GET['delete'])) {
                                                     <th>No</th>
                                                     <th>Nama</th>
                                                     <th>Email</th>
+                                                    <th>Subject</th>
+                                                    <th>Pesan</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php $no = 1;
-                                                while ($rowUser = mysqli_fetch_assoc($queryUser)) { ?>
+                                                $rowContacts = mysqli_fetch_all($queryContacts, MYSQLI_ASSOC);
+                                                foreach ($rowContacts as $rowContact) { ?>
                                                     <tr>
                                                         <td><?php echo $no++ ?></td>
                                                         <td><?php echo $rowContact['name'] ?></td>
@@ -106,11 +109,14 @@ if (isset($_GET['delete'])) {
                                                         <td><?php echo $rowContact['subject'] ?></td>
                                                         <td><?php echo $rowContact['message'] ?></td>
                                                         <td>
+
                                                             <a href="kirim-pesan.php?pesanId=<?php echo $rowContact['id'] ?>" class="btn btn-success btn-sm">
-                                                                <span class="tf-icon bx bx-pencil bx-18px"></span></a>
-                                                            <a onclick="return confirm('Apakah anda yakin akan menghapus data ini?')"
+                                                                <span class="tf-icon bx bx-pencil bx-18px "></span>
+                                                            </a>
+                                                            <a onclick="return confirm('Apakah anda yakin akan menghapus data ini??')"
                                                                 href="user.php?delete=<?php echo $rowContact['id'] ?>" class="btn btn-danger btn-sm">
-                                                                <span class="tf-icon bx bx-trash bx-18px"></span></a>
+                                                                <span class="tf-icon bx bx-trash bx-18px "></span>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
